@@ -41,6 +41,13 @@
                         <label for="address">Dirección</label>
                         <input type="text" name="address" id="address" class="form-control">
                     </div>
+                    {{-- <div class="form-group">
+                        <label for="status">Estado del Perfil</label>
+                        <select class="form-control" id="status" name="status">
+                            <option value="activo" {{ old('status', 'activo') == 'activo' ? 'selected' : '' }}>activo</option>
+                            <option value="inactivo" {{ old('status') == 'inactivo' ? 'selected' : '' }}>inactivo</option>
+                        </select>
+                    </div> --}}
 
                     <div class="modal-footer mt-3">
                         <button type="submit" class="btn btn-primary">Guardar</button>

@@ -4,12 +4,6 @@
 <div class="container">
     <h1>Lista de Clientes</h1>
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -32,10 +26,15 @@
                     <td>
                         <button type="button" class="btn btn-info btn-sm" onclick="openClientModal({{ $client->id }}, 'show')">Ver</button>
                         <button type="button" class="btn btn-warning btn-sm" onclick="openClientModal({{ $client->id }}, 'edit')">Editar</button>
-                        <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display:inline;">
+                        {{-- <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este cliente?')">Eliminar</button>
+                        </form>  --}}
+                        <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display:inline;" class="delete-form">
+                            @csrf
+                            @method('DELETE')
+                            <button type="button" class="btn btn-danger btn-sm delete-btn" data-id="{{ $client->id }}">Eliminar</button>
                         </form>
                     </td>
                 </tr>
@@ -70,6 +69,37 @@
     </x-modalbootstrap>
 
 </div>
+
+{{-- Script para manejar sweetAlert2 para eliminar el cliente --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Evita que el formulario se envíe inmediatamente
+                
+                const clientId = this.getAttribute('data-id');
+                const form = this.closest('form');
+                
+                // Usar SweetAlert2 para mostrar un diálogo de confirmación elegante
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: '¿Realmente deseas eliminar este cliente? Esta acción no se puede deshacer.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    // Si el usuario confirma, enviamos el formulario
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 {{-- Script para manejar la apertura del modal de crear cliente --}}
 <script>

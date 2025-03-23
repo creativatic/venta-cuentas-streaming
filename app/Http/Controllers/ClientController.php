@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ClientController extends Controller
 {
@@ -112,8 +113,10 @@ class ClientController extends Controller
     public function destroy(Client $client)
     {
         $client->delete();
+        
         return redirect()->route('clients.index')->with('success', 'Cliente eliminado exitosamente.');
     }
+    
 
     public function createAccountModal($id)
     {
